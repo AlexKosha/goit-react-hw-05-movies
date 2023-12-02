@@ -1,5 +1,6 @@
 import { Formik, Form, Field } from 'formik';
-// import { FaSearch } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { FaSearch } from 'react-icons/fa';
 import styled from '@emotion/styled';
 
 const initialValues = {
@@ -36,20 +37,20 @@ const SearchBtn = styled.button`
   cursor: pointer;
   outline: none;
 `;
-// const SearchBtnLabel = styled(FaSearch)`
-//   position: absolute;
-//   left: 10px;
-//   top: 14px;
-//   width: 24px;
-//   height: 24px;
-//   padding: 0;
-//   border: 0;
-// `;
+const SearchBtnLabel = styled(FaSearch)`
+  position: absolute;
+  left: 10px;
+  top: 14px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 0;
+`;
 
 const SearchForm = ({ onSubmit }) => {
   const handleSubmit = (values, { resetForm }) => {
     if (values.value.trim() === '') {
-      // toast.error('Write something in the search');
+      toast.error('Write something in the search');
       return;
     }
     console.log(values.value);
@@ -61,8 +62,7 @@ const SearchForm = ({ onSubmit }) => {
       <FormMovies>
         <Input type="text" name="value" placeholder="Enter your search term" />
         <SearchBtn type="submit">
-          {/* <SearchBtnLabel /> */}
-          Search
+          <SearchBtnLabel />
         </SearchBtn>
       </FormMovies>
     </Formik>

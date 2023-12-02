@@ -1,18 +1,27 @@
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { ItemMovie, ListMovies, MovieImg } from './FoundMovies.styled';
 
 const FoundMovies = ({ movies, location }) => {
-  useEffect(() => {}, [movies]);
+  const defaultImg =
+    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
   return (
-    <ul>
-      {movies.map(({ title, id }) => (
-        <li key={id}>
+    <ListMovies>
+      {movies.map(({ title, id, poster_path }) => (
+        <ItemMovie key={id}>
           <Link to={`/movies/${id}`} state={{ from: location }}>
-            {title}
+            <MovieImg
+              src={
+                poster_path
+                  ? `https://image.tmdb.org/t/p/w300${poster_path}`
+                  : defaultImg
+              }
+              alt={title}
+            />
+            <span>{title}</span>
           </Link>
-        </li>
+        </ItemMovie>
       ))}
-    </ul>
+    </ListMovies>
   );
 };
 

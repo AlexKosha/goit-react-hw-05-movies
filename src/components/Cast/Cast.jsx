@@ -1,30 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as MoviseService from 'services/MoviesServices';
+import { ItemActor, ListActors } from './Cast.styled';
 
 const Cast = () => {
   const [actorsInfo, setActorsInfo] = useState(null);
-
+  const isFirstRender = useRef(true);
   const { movieId } = useParams();
   const defaultImg =
-    'https://ireland.apollo.olxcdn.com/v1/files/0iq0gb9ppip8-UA/image;s=1000x700';
+    'https://via.placeholder.com/185x278.png?text=Image+Not+Found';
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     if (!movieId) return;
     const getMovieDetails = async () => {
       try {
         const dataActorsInfo = await MoviseService.getMovieCastInfo(movieId);
         setActorsInfo(dataActorsInfo.cast);
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Oops! Something went wrong!');
+      }
     };
 
     getMovieDetails();
   }, [movieId]);
   return (
-    <ul>
+    <ListActors>
       {actorsInfo &&
         actorsInfo.map(({ original_name, character, profile_path, id }) => (
-          <li key={id}>
+          <ItemActor key={id}>
             <img
               src={
                 profile_path
@@ -35,9 +43,9 @@ const Cast = () => {
             />
             <p>{original_name}</p>
             <p>Character: {character}</p>
-          </li>
+          </ItemActor>
         ))}
-    </ul>
+    </ListActors>
   );
 };
 

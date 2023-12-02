@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { lazy, useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import SearchForm from 'components/SearchForm/SearchForm';
 import * as MoviseService from 'services/MoviesServices';
-import FoundMovies from 'components/FoundMovies/FoundMovies';
+
+const FoundMovies = lazy(() => import('components/FoundMovies/FoundMovies'));
 
 const SearchMovies = () => {
   const [movies, setMovies] = useState(null);
-  // const [query, setQuery] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
 
@@ -17,7 +18,9 @@ const SearchMovies = () => {
       try {
         const nameMovies = await MoviseService.getMoviesListByQuery(query);
         setMovies(nameMovies.results);
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Oops! Something went wrong!');
+      }
     };
 
     getMoviesList();
@@ -30,11 +33,6 @@ const SearchMovies = () => {
 
     setSearchParams({ query: value });
   };
-
-  // const addQuery = value => {
-  //   if (value === query) return;
-  //   setQuery(value);
-  // };
 
   return (
     <>

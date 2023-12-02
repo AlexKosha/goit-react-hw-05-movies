@@ -1,6 +1,8 @@
-import MovieInfo from 'components/MovieInfo/MovieInfo';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useParams, Link, Outlet, useLocation } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import MovieInfo from 'components/MovieInfo/MovieInfo';
 import * as MoviseService from 'services/MoviesServices';
 
 const Movie = () => {
@@ -15,7 +17,9 @@ const Movie = () => {
       try {
         const dataMovie = await MoviseService.getMovieById(movieId);
         setMovie(dataMovie);
-      } catch (error) {}
+      } catch (error) {
+        toast.error('Oops! Something went wrong!');
+      }
     };
 
     getMovieDetails();
@@ -43,7 +47,9 @@ const Movie = () => {
           </ul>
         </div>
       )}
-      <Outlet />
+      <Suspense fallback={<div>loading ...</div>}>
+        <Outlet />
+      </Suspense>
     </>
   );
 };
