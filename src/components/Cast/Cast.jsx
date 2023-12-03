@@ -20,6 +20,10 @@ const Cast = () => {
     const getMovieDetails = async () => {
       try {
         const dataActorsInfo = await MoviseService.getMovieCastInfo(movieId);
+        if (dataActorsInfo.cast.lenght === 0) {
+          toast.error("We don't have any cast for this movie");
+          return;
+        }
         setActorsInfo(dataActorsInfo.cast);
       } catch (error) {
         toast.error('Oops! Something went wrong!');
